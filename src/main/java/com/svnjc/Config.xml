@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="svnUrl">http://www.example.com/svn_rep</entry>
+	<entry key="username">sguru</entry>
+	<entry key="password">gurug</entry>
+	<entry key="WC_Dir">/tmp/wcGuruGG</entry>
+	<entry key="checkInMessage">checked in using svnJC interface i.e. using svnkit</entry>
+</properties>
+	
