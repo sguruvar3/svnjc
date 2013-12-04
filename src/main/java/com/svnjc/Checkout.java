@@ -29,22 +29,14 @@ public class Checkout {
 	 * simulates the "svn co" command
 	 * @param prop
 	 */
-	public static void executeCheckoutProcess(Properties prop,Client client,SVNURL svnURL,String dstPath) {
+	public static void executeCheckoutProcess(SVNURL svnURL,String dstPath) {
 		//setup repo factory
 		DAVRepositoryFactory.setup();
 		
 		String username="";
 		String password="";
 		
-		try{
-			username= client.getUserId();
-			password=client.getPassword();
-			}
-		catch(Exception e){
-			logger.debug(e.getMessage());
-			e.printStackTrace();
-		}
-		
+				
 		DefaultSVNOptions options=SVNWCUtil.createDefaultOptions(true);
 		svnClientManager = SVNClientManager.newInstance(options, username, password);
         svnUpdateEventHandler = new UpdateEventHandler();
@@ -68,11 +60,11 @@ public class Checkout {
 	            //signature : long doCheckout(SVNURL url, File dstPath, SVNRevision pegRevision, SVNRevision revision, SVNDepth depth, boolean allowUnversionedObstructions) 
 	            long l=updateClient.doCheckout(svnURL, wcDir, SVNRevision.HEAD, SVNRevision.HEAD, SVNDepth.fromRecurse(true),false);
 	            if (l==-1){
-	            	logger.debug("Revision is -1");
+	            	System.out.println("Revision is -1");
 	            }
-	            logger.debug(l);
+	            System.out.println(l);
 	        } catch (SVNException svne) {
-	        	logger.debug("error while checking out a working copy for the location '" + svne.getErrorMessage().getMessage()  );
+	        	System.out.println("error while checking out a working copy for the location '" + svne.getErrorMessage().getMessage()  );
 	            showError("error while checking out a working copy for the location '" + svne.getErrorMessage().getMessage(),svne  );
 	        }
 	        
@@ -83,7 +75,7 @@ public class Checkout {
 	 * 
 	 */
     private static void showError(String message, Exception e){
-    	logger.debug(message+(e!=null ? ": "+e.getMessage() : ""));
+    	System.out.println(message+(e!=null ? ": "+e.getMessage() : ""));
         System.err.println(message+(e!=null ? ": "+e.getMessage() : ""));
         System.exit(1);
     }
@@ -96,21 +88,21 @@ public class Checkout {
 	 */
 	public static void main(String args[]){
 		if (args.length !=2){
-			logger.debug("Missing CLI arguments ");
- 	  	   	logger.debug("Usage: java Checkout <svn_url> <workspace>");
+			System.out.println("Missing CLI arguments ");
+ 	  	   	System.out.println("Usage: java Checkout <svn_url> <workspace>");
  	  	    System.exit(256);
 		}
 		else{
 			try{
-				Properties prop = new Properties();
-    			InputStream fis =  Info.class.getResourceAsStream("Config.xml");
-    			prop.loadFromXML(fis);
+				//Properties prop = new Properties();
+    			//InputStream fis =  Info.class.getResourceAsStream("Config.xml");
+    			//prop.loadFromXML(fis);
     			Client client=new Client();
-    			client.setUserId(prop.getProperty("username"));
-    			client.setPassword(prop.getProperty("password"));
-		     	SVNURL svnURL=SVNURL.parseURIEncoded(args[0]);
-				String dstPath=args[1];
-				executeCheckoutProcess(prop,client,svnURL,dstPath);   
+    			//client.setUserId(prop.getProperty("username"));
+    			//client.setPassword(prop.getProperty("password"));
+		     	SVNURL svnURL=SVNURL.parseURIEncoded(args[1]);
+				String dstPath=args[0];
+				executeCheckoutProcess(svnURL,dstPath);   
 				}
 		catch(Exception e){
 			e.printStackTrace();
